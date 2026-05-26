@@ -6,5 +6,11 @@ async function createStudent(data) {
 async function getStudent() {
   return await student.findAll();
 }
+async function updateStudent(data, id) {
+  return await student.update(data, { where: { id } });
+}
+async function deleteStudent(id) {
+  return await student.destroy({ where: { id } });
+}
 
-export { createStudent, getStudent };
+export { createStudent, getStudent, updateStudent, deleteStudent };

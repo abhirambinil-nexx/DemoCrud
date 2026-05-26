@@ -22,7 +22,7 @@ const student = sequelize.define(
       type: DataTypes.STRING,
     },
     mobile: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
     },
     status: {
@@ -40,6 +40,7 @@ const student = sequelize.define(
   },
   {
     timestamps: true,
+    underscored: true,
   },
 );
 
