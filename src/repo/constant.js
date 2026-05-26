@@ -13,4 +13,8 @@ async function deleteStudent(id) {
   return await student.destroy({ where: { id } });
 }
 
-export { createStudent, getStudent, updateStudent, deleteStudent };
+async function listStudent(limit, offset) {
+  return await student.findAndCountAll({ limit, offset });
+}
+
+export { createStudent, getStudent, updateStudent, deleteStudent, listStudent };

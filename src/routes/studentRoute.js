@@ -1,5 +1,11 @@
 import express from "express";
-import { create, get, update, del } from "../controller/crud.controller.js";
+import {
+  create,
+  read,
+  update,
+  del,
+  get,
+} from "../controller/crud.controller.js";
 
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -7,7 +13,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/student", create);
-router.get("/student/get", get);
+router.get("/student/read", read);
 router.patch("/student/update/:id", update);
 router.delete("/student/delete/:id", del);
+router.get("/student/get/", get);
+
 export default router;

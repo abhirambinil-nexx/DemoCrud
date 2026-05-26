@@ -1,4 +1,10 @@
-import { createStudent, getStudent, updateStudent, deleteStudent} from "../repo/constant.js";
+import {
+  createStudent,
+  getStudent,
+  updateStudent,
+  deleteStudent,
+  listStudent,
+} from "../repo/constant.js";
 
 async function create(req, res) {
   try {
@@ -14,7 +20,7 @@ async function create(req, res) {
   }
 }
 
-async function get(req, res) {
+async function read(req, res) {
   try {
     const data = await getStudent();
     res.status(200).json({
@@ -57,4 +63,30 @@ async function del(req, res) {
   }
 }
 
-export { create, get, update, del };
+async function get(req, res) {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+    const page = parseInt(req.query.page) || 1;
+    let offset;
+    if (req.query.offset) {
+      offset = parseInt(req.query.offset);
+    } else {
+      offset = (page - 1) * limit;
+    }
+    const { count, rows } = await listStudent(limit, offset);
+
+    res.status(200).json({
+      success: true,
+      totalStudentsDDetails: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      data: rows,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+}
+
+export { create, read, update, del, get };
