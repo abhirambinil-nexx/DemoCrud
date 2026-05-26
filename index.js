@@ -5,7 +5,12 @@ import studentRoute from "./src/routes/studentRoute.js";
 import { createStudent, getStudent } from "./src/repo/constant.js";
 
 const app = express();
+
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Server Running  Welcome to my server");
+});
 
 app.use("/api", studentRoute);
 

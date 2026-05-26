@@ -9,7 +9,7 @@ async function create(req, res) {
     });
   } catch (err) {
     res.status(500).json({
-      message: err,
+      message: err.message,
     });
   }
 }
@@ -20,7 +20,7 @@ async function get(req, res) {
     res.status(200).json(data);
   } catch (err) {
     res.status(500).json({
-      message: err,
+      message: err.message,
     });
   }
 }

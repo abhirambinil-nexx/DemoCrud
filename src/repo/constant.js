@@ -1,10 +1,10 @@
-import stud from "../models/studentmodel.js";
+import student from "../models/studentmodel.js";
 
 async function createStudent(data) {
-  return await stud.create(data);
+  return await student.create(data);
 }
 async function getStudent() {
-  return await stud.findAll();
+  return await student.findAll();
 }
 
 export { createStudent, getStudent };
