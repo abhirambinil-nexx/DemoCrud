@@ -5,7 +5,7 @@ import {
   deleteStudent,
   listStudent,
 } from "../repo/student.repo.js";
-import client from "../config/redis.js";
+import client from "../Redis/redis.js";
 
 async function create(req, res) {
   try {
