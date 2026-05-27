@@ -4,11 +4,15 @@ import {
   updateStudent,
   deleteStudent,
   listStudent,
-} from "../repo/constant.js";
+} from "../repo/student.repo.js";
+import client from "../config/redis.js";
 
 async function create(req, res) {
   try {
     const data = await createStudent(req.body);
+
+    await client.del("students");
+
     res.status(201).json({
       message: "created successfully",
       data,
@@ -22,7 +26,22 @@ async function create(req, res) {
 
 async function read(req, res) {
   try {
+    const cachedata = await client.get("students");
+
+    if (cachedata) {
+      return res.status(200).json({
+        success: true,
+        source: "Redis-cache",
+        data: JSON.parse(cachedata),
+      });
+    }
+
     const data = await getStudent();
+
+    await client.set("students", JSON.stringify(data), {
+      EX: 4200,
+    });
+
     res.status(200).json({
       success: true,
       totalStudentsDetails: data.length,
@@ -38,11 +57,14 @@ async function read(req, res) {
 async function update(req, res) {
   try {
     const data = await updateStudent(req.body, req.params.id);
+
+    await client.del("students");
     res.status(200).json({
       success: true,
     });
+    await client.del("students");
   } catch (err) {
-    res.status().json({
+    res.status(500).json({
       message: err.message,
     });
   }
@@ -51,11 +73,12 @@ async function update(req, res) {
 async function del(req, res) {
   try {
     const data = await deleteStudent(req.params.id);
+    await client.del("students");
     res.status(200).json({
       success: true,
-
       data,
     });
+    await client.del("students");
   } catch (err) {
     res.status(500).json({
       message: err.message,

@@ -1,13 +1,13 @@
 import express from "express";
 import sequelize from "./src/config/db.js";
-import student from "./src/models/studentmodel.js";
-import studentRoute from "./src/routes/studentRoute.js";
+import student from "./src/models/student.model.js";
+import studentRoute from "./src/routes/student.Route.js";
 import {
   createStudent,
   getStudent,
   updateStudent,
   deleteStudent,
-} from "./src/repo/constant.js";
+} from "./src/repo/student.repo.js";
 
 const app = express();
 
@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
 app.use("/api", studentRoute);
 
 await sequelize.sync({ alter: true });
-
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
