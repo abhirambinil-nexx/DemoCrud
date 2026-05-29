@@ -2,12 +2,6 @@ import express from "express";
 import sequelize from "./src/config/db.js";
 import student from "./src/models/student.model.js";
 import studentRoute from "./src/routes/student.Route.js";
-import {
-  createStudent,
-  getStudent,
-  updateStudent,
-  deleteStudent,
-} from "./src/repo/student.repo.js";
 
 const app = express();
 
