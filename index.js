@@ -2,6 +2,8 @@ import express from "express";
 import sequelize from "./src/config/db.js";
 import student from "./src/models/student.model.js";
 import studentRoute from "./src/routes/student.Route.js";
+import Attendance from "./src/models/attendence.model.js";
+import attendanceRoute from "./src/routes/attendence.Route.js";
 
 const app = express();
 
@@ -12,6 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", studentRoute);
+app.use("/api/attend", attendanceRoute);
 
 await sequelize.sync({ alter: true });
 

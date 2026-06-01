@@ -21,6 +21,9 @@ const student = sequelize.define(
     email: {
       type: DataTypes.STRING,
     },
+    passwaod:{
+      type : DataTypes.STRING(255)
+    },
     mobile: {
       type: DataTypes.BIGINT,
       allowNull: false,

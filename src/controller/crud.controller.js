@@ -18,7 +18,6 @@ import {
   updatecache,
   getTTL,
   // lst,
-  mltcreate
 } from "../repo/redis.repo.js";
 
 import client from "../Redis/redis.js";

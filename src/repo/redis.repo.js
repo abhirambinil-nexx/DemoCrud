@@ -69,4 +69,4 @@ async function getTTL(key){
 //     
 
 
-export { getInBulk, getcache, setcache, deletecache, updatecache, getTTL,lst };
+export { getInBulk, getcache, setcache, deletecache, updatecache, getTTL };
