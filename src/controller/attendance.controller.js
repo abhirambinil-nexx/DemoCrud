@@ -1,12 +1,15 @@
 import {
   markAttendance,
   getAttendance,
-  getAttendanceById,
+  getAttendanceByStudentId,
   updateAttendance,
   deleteAttendance,
 } from "../repo/attendence.repo.js";
 
-import { setAttendance } from "../repo/attendance.redis.repo.js";
+import {
+  setAttendance,
+  deleteAttendance as deleteRedisAttendance,
+} from "../repo/attendance.redis.repo.js";
 
 async function createAttendance(req, res) {
   try {
@@ -14,7 +17,7 @@ async function createAttendance(req, res) {
 
     const result = await markAttendance(data);
 
-    await setAttendance(data.student_id, data.date, data);
+    await setAttendance(data);
 
     res.status(201).json({
       success: true,
@@ -22,9 +25,12 @@ async function createAttendance(req, res) {
       data: result,
     });
   } catch (err) {
+    console.log(err.errors);
+
     res.status(500).json({
       success: false,
       message: err.message,
+      errors: err.errors?.map((error) => error.message),
     });
   }
 }
@@ -47,19 +53,23 @@ async function getAllAttendance(req, res) {
 
 async function getOneAttendance(req, res) {
   try {
-    const { id } = req.params;
+    const { studentId } = req.params;
+    const data = await getAttendanceByStudentId(studentId);
 
-    const data = await getAttendanceById(id);
-
-    if (!data) {
+    if (data.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Attendance not found",
       });
     }
 
+    for (const attendance of data) {
+      await setAttendance(attendance);
+    }
+
     res.status(200).json({
       success: true,
+      message: "Attendance saved in redis",
       data,
     });
   } catch (err) {
@@ -72,11 +82,14 @@ async function getOneAttendance(req, res) {
 
 async function updateOneAttendance(req, res) {
   try {
-    const { id } = req.params;
+    const { studentId } = req.params;
+    const data = {
+      ...req.body,
+      student_id: studentId,
+    };
+    await updateAttendance(studentId, data);
 
-    const data = req.body;
-
-    await updateAttendance(id, data);
+    await setAttendance(data);
 
     res.status(200).json({
       success: true,
@@ -92,10 +105,10 @@ async function updateOneAttendance(req, res) {
 
 async function deleteOneAttendance(req, res) {
   try {
-    const { id } = req.params;
+    const { studentId,date  } = req.params;
+    await deleteRedisAttendance(studentId,date);
 
-    await deleteAttendance(id);
-
+    await deleteAttendance(studentId);
     res.status(200).json({
       success: true,
       message: "Attendance deleted",

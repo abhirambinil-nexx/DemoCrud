@@ -1,14 +1,16 @@
 import client from "../Redis/redis.js";
 
-async function setAttendance(studentId, date, data) {
+async function setAttendance(data) {
+  const studentId = data.student_id;
+  const date = data.date;
   const key = `attend:${studentId}:${date}`;
 
   await client.hSet(key, {
-    status: data.status || null,
-    checkin_time: data.checkin_time || null,
-    checkout_time: data.checkout_time || null,
+    status: data.status,
+    checkin_time: data.checkin_time,
+    checkout_time: data.checkout_time,
   });
-  await client.expire({ EX: 86400 });
+  await client.expire(key, 24 * 60 * 60);
 }
 
 async function getAttendance(studentId, date) {

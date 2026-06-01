@@ -8,22 +8,26 @@ async function getAttendance() {
   return await Attendance.findAll();
 }
 
-async function getAttendanceById(id) {
-  return await Attendance.findByPk(id);
-}
-
-async function updateAttendance(id, data) {
-  return await Attendance.update(data, {
+async function getAttendanceByStudentId(studentId) {
+  return await Attendance.findAll({
     where: {
-      id,
+      student_id: studentId,
     },
   });
 }
 
-async function deleteAttendance(id) {
+async function updateAttendance(studentId, data) {
+  return await Attendance.update(data, {
+    where: {
+      student_id: studentId,
+    },
+  });
+}
+
+async function deleteAttendance(studentId) {
   return await Attendance.destroy({
     where: {
-      id,
+      student_id: studentId,
     },
   });
 }
@@ -31,7 +35,7 @@ async function deleteAttendance(id) {
 export {
   markAttendance,
   getAttendance,
-  getAttendanceById,
+  getAttendanceByStudentId,
   updateAttendance,
   deleteAttendance,
 };
