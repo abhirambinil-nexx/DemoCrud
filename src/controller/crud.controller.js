@@ -1,3 +1,4 @@
+//imports
 import {
   createStudent,
   getStudent,
@@ -21,7 +22,8 @@ import {
 } from "../repo/redis.repo.js";
 
 import client from "../Redis/redis.js";
-
+// controller functions
+// create student
 async function create(req, res) {
   try {
     const data = await createStudent(req.body);
@@ -37,7 +39,7 @@ async function create(req, res) {
     });
   }
 }
-
+// read student
 async function read(req, res) {
   try {
     const cachedata = await getcache(`user:${req.params.id}`);
@@ -64,7 +66,7 @@ async function read(req, res) {
     });
   }
 }
-
+// update student
 async function update(req, res) {
   try {
     const id = parseInt(req.params.id);
@@ -91,7 +93,7 @@ async function update(req, res) {
     });
   }
 }
-
+// delete student
 async function del(req, res) {
   try {
     const data = await deleteStudent(req.params.id);
@@ -107,7 +109,7 @@ async function del(req, res) {
     });
   }
 }
-
+// list student
 async function get(req, res) {
   try {
     const limit = parseInt(req.query.limit) || 5;
@@ -118,17 +120,6 @@ async function get(req, res) {
     } else {
       offset = (page - 1) * limit;
     }
-    // const cacheKey = `user${id}`;
-
-    // const cacheData = await lst(cacheKey,limit,offset);
-
-    // if (cacheData) {
-    //   return res.status(200).json({
-    //     success: true,
-    //     source: "Redis-cache",
-    //     ...JSON.parse(cacheData),
-    //   });
-    // }
 
     const { count, rows } = await listStudent(limit, offset);
 
@@ -145,7 +136,7 @@ async function get(req, res) {
     });
   }
 }
-
+// get student by id
 async function getbyId(req, res) {
   try {
     const id = parseInt(req.params.id);
@@ -177,6 +168,7 @@ async function getbyId(req, res) {
     });
   }
 }
+// bulk create student
 async function bulkcreate(req, res) {
   try {
     const start = parseInt(req.params.startId);
@@ -206,7 +198,7 @@ async function bulkcreate(req, res) {
     });
   }
 }
-
+// bulk update student
 async function bulkupdate(req, res) {
   try {
     const start = parseInt(req.params.startId);
@@ -235,7 +227,7 @@ async function bulkupdate(req, res) {
     });
   }
 }
-
+// bulk delete student
 async function bulkdelete(req, res) {
   try {
     const start = parseInt(req.params.startId);
@@ -265,6 +257,7 @@ async function bulkdelete(req, res) {
     });
   }
 }
+
 export {
   create,
   read,

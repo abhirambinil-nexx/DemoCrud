@@ -1,3 +1,4 @@
+//imports
 import express from "express";
 
 import {
@@ -11,10 +12,13 @@ import {
 } from "../controller/attendance.controller.js";
 
 import { authentication } from "../Middleware/auth.route.js";
-
+// attendance routes
 const attendence_router = express.Router();
-
-attendence_router.post("/attendance", /*authentication.auth,*/ createAttendance);
+// attendence_router
+attendence_router.post(
+  "/attendance",
+  /*authentication.auth,*/ createAttendance,
+);
 attendence_router.get(
   "/attendance",
   /*authentication.adminAuth,*/ getAllAttendance,
@@ -40,4 +44,5 @@ attendence_router.get(
   "/attendance/total/:studentId/:date",
   /*authentication.auth,*/ getTotalAttendanceOfMonth,
 );
+
 export default attendence_router;

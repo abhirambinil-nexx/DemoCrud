@@ -1,6 +1,8 @@
+// imports
 import { Op } from "sequelize";
 import Attendance from "../models/attendence.model.js";
-
+// Sequelize functions for attendance management
+// total attendance of a student
 async function totalattendance(studentId) {
   try {
     const totalAttendance = await Attendance.count({
@@ -21,6 +23,7 @@ async function totalattendance(studentId) {
   }
 }
 
+// total attendance of a student for a specific month
 async function totalattendanceofmonth(studentId, dateString) {
   try {
     const date = new Date(dateString);

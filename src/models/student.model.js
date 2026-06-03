@@ -1,6 +1,7 @@
+//imports
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-
+// Define the Student model
 const student = sequelize.define(
   "student",
   {

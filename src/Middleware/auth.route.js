@@ -1,17 +1,15 @@
+//imports
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 import Api401Error from "../utils/errorbase/api401Error.js";
 import API_RESPONSE_MESSAGE from "../utils/errorbase/apiResponseMEssage.js";
 import student from "../models/student.model.js";
-
+// Load environment variables
 dotenv.config();
-
 const secret = process.env.SECRET_KEY || "default_secret_key";
 const internalApiKey = process.env.API_KEY;
-
-
-
+//
 const getTokenFromRequest = (req) => {
   const authHeader =
     req.headers["authorization"] || req.headers["Authorization"];

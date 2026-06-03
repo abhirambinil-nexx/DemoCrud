@@ -1,4 +1,7 @@
+//imports
 import client from "../Redis/redis.js";
+// Redis functions for attendance management
+// set attendance
 
 async function getInBulk(keys){
     try{
@@ -15,7 +18,7 @@ async function getInBulk(keys){
     }
     
 }
-
+// get cache
 async function getcache(key){
     try{
         const data = await client.get(key);
@@ -24,7 +27,7 @@ async function getcache(key){
         throw new Error(err.message);   
     }
 }
-
+// set cache
 async function setcache(key,value,time){
     try{
         await client.del("students");
@@ -35,7 +38,7 @@ async function setcache(key,value,time){
         throw new Error(err.message);
     }
 }
-
+// delete cache
 async function deletecache(key){
     try{
         await client.del(key);
@@ -44,7 +47,7 @@ async function deletecache(key){
         throw new Error(err.message);
     }
 }
-
+// update cache
 async function updatecache(key,value,time){
     try{
         await client.del("students");
@@ -55,7 +58,7 @@ async function updatecache(key,value,time){
         throw new Error(err.message);
     }
 }
-
+// get TTL
 async function getTTL(key){
     try{
         const ttl =await client.ttl(key);
@@ -65,8 +68,7 @@ async function getTTL(key){
     }
 }
 
-// async function lst(key,limit,offset){
-//     
+    
 
 
 export { getInBulk, getcache, setcache, deletecache, updatecache, getTTL };

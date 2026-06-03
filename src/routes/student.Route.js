@@ -1,3 +1,4 @@
+// imports
 import express from "express";
 import {
   create,
@@ -13,12 +14,12 @@ import {
 } from "../controller/crud.controller.js";
 
 import { authentication } from "../Middleware/auth.route.js";
-
+// student routes
 const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Welcome to my server");
 });
-
+// student routes
 router.post("/student", /*authentication.adminAuth,*/ create);
 router.get("/student/read", /*authentication.auth,*/ read);
 router.patch("/student/update/:id", /*authentication.adminAuth,*/ update);

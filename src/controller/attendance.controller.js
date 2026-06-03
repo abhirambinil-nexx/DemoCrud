@@ -1,3 +1,4 @@
+// imports
 import {
   markAttendance,
   getAttendance,
@@ -16,6 +17,8 @@ import {
   deleteAttendance as deleteRedisAttendance,
 } from "../repo/attendance.redis.repo.js";
 
+// controller functions
+// create attendance
 async function createAttendance(req, res) {
   try {
     const data = req.body;
@@ -43,7 +46,7 @@ async function createAttendance(req, res) {
     });
   }
 }
-
+// get all attendance
 async function getAllAttendance(req, res) {
   try {
     const data = await getAttendance();
@@ -59,7 +62,7 @@ async function getAllAttendance(req, res) {
     });
   }
 }
-
+// get one attendance by student id
 async function getOneAttendance(req, res) {
   try {
     const { studentId } = req.params;
@@ -88,7 +91,7 @@ async function getOneAttendance(req, res) {
     });
   }
 }
-
+// update attendance
 async function updateOneAttendance(req, res) {
   try {
     const { studentId } = req.params;
@@ -111,7 +114,7 @@ async function updateOneAttendance(req, res) {
     });
   }
 }
-
+// delete attendance
 async function deleteOneAttendance(req, res) {
   try {
     const { studentId, date } = req.params;
@@ -129,7 +132,7 @@ async function deleteOneAttendance(req, res) {
     });
   }
 }
-
+// get total attendance of a student
 async function getTotalAttendance(req, res) {
   try {
     const { studentId } = req.params;
@@ -145,7 +148,7 @@ async function getTotalAttendance(req, res) {
     });
   }
 }
-
+// get total attendance of a student in a month
 async function getTotalAttendanceOfMonth(req, res) {
   try {
     const { studentId, date } = req.params;
