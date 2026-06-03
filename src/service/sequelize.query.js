@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Attendance from "../models/attendence.model.js";
 
 async function totalattendance(studentId) {
@@ -20,4 +21,35 @@ async function totalattendance(studentId) {
   }
 }
 
-export { totalattendance };
+async function totalattendanceofmonth(studentId, dateString) {
+  try {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+
+    const totalAttendance = await Attendance.count({
+      where: {
+        student_id: studentId,
+        status: "present",
+        date: {
+          [Op.between]: [startDate, endDate],
+        },
+      },
+    });
+
+    return {
+      studentId,
+      year,
+      month: month + 1,
+      total_attendance: totalAttendance,
+    };
+  } catch (error) {
+    throw new Error(
+      `Error fetching total attendance for student ${error.message}`,
+    );
+  }
+}
+
+export { totalattendance, totalattendanceofmonth };

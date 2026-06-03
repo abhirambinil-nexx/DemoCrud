@@ -129,7 +129,7 @@ async function get(req, res) {
     //     ...JSON.parse(cacheData),
     //   });
     // }
-    
+
     const { count, rows } = await listStudent(limit, offset);
 
     res.status(200).json({
@@ -157,7 +157,7 @@ async function getbyId(req, res) {
         data: JSON.parse(cachedata),
       });
     }
-    
+
     const data = await getStudentById(id);
     if (!data) {
       return res.status(404).json({
@@ -244,8 +244,8 @@ async function bulkdelete(req, res) {
     const cachedata = await client.get("students");
     const students = JSON.parse(cachedata);
 
-    const filtered = student.filter(
-      (student) => student.id >= start && student.id <= end,
+    const filtered = students.filter(
+      (students) => students.id >= start && students.id <= end,
     );
 
     const data = await deletebulkStudent(start, end);

@@ -6,7 +6,10 @@ import {
   deleteAttendance,
 } from "../repo/attendence.repo.js";
 
-import { totalattendance } from "../service/sequelize.query.js";
+import {
+  totalattendance,
+  totalattendanceofmonth,
+} from "../service/sequelize.query.js";
 
 import {
   setAttendance,
@@ -19,7 +22,11 @@ async function createAttendance(req, res) {
 
     const result = await markAttendance(data);
 
-    await setAttendance(data);
+    try {
+      await setAttendance(data);
+    } catch (cacheError) {
+      console.error("Attendance Redis cache error:", cacheError.message);
+    }
 
     res.status(201).json({
       success: true,
@@ -138,6 +145,23 @@ async function getTotalAttendance(req, res) {
     });
   }
 }
+
+async function getTotalAttendanceOfMonth(req, res) {
+  try {
+    const { studentId, date } = req.params;
+    const data = await totalattendanceofmonth(studentId, date);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
+
 export {
   createAttendance,
   getAllAttendance,
@@ -145,4 +169,5 @@ export {
   updateOneAttendance,
   deleteOneAttendance,
   getTotalAttendance,
+  getTotalAttendanceOfMonth,
 };

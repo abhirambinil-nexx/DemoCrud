@@ -7,19 +7,41 @@ import student from "../models/student.model.js";
 
 dotenv.config();
 
-const jwtSecret = process.env.JWT_SECRET || process.env.JWT_SECRETE;
-const internalApiKey = process.env.INTERNAL_API_KEY || process.env.API_KEY;
+const secret = process.env.SECRET_KEY || "default_secret_key";
+const internalApiKey = process.env.API_KEY;
+
+
+
+const getTokenFromRequest = (req) => {
+  const authHeader =
+    req.headers["authorization"] || req.headers["Authorization"];
+  if (!authHeader) {
+    return req.headers["access-token"];
+  }
+
+  const token = authHeader.replace(/Bearer\s+/i, "").trim();
+  return token || req.headers["access-token"];
+};
+
+const handleJwtError = (error) => {
+  if (
+    error.name === "JsonWebTokenError" ||
+    error.name === "TokenExpiredError"
+  ) {
+    return new Api401Error(error.message || API_RESPONSE_MESSAGE.UNAUTHORIZED);
+  }
+  return error;
+};
 
 const auth = async (req, res, next) => {
   try {
-    const token =
-      req.headers["authorization"]?.split(" ")[1] ||
-      req.headers["access-token"];
+    const token = getTokenFromRequest(req);
+
     if (!token) {
       throw new Api401Error(API_RESPONSE_MESSAGE.UNAUTHORIZED);
     }
 
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, secret);
 
     req.user = {
       id: decoded.id,
@@ -28,44 +50,41 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    next(handleJwtError(error));
   }
 };
 
 const auth_detail = async (req, res, next) => {
   try {
-    const token =
-      req.headers["authorization"]?.split(" ")[1] ||
-      req.headers["access-token"];
+    const token = getTokenFromRequest(req);
 
     if (!token) {
       throw new Api401Error(API_RESPONSE_MESSAGE.UNAUTHORIZED);
     }
-    const decoded = jwt.verify(token, jwtSecret);
+
+    const decoded = jwt.verify(token, secret);
     const user = await student.findByPk(decoded.id);
 
     if (!user) {
       throw new Api401Error(API_RESPONSE_MESSAGE.UNAUTHORIZED);
     }
+
     req.user = user;
     next();
   } catch (error) {
-    next(error);
+    next(handleJwtError(error));
   }
 };
 
 const adminAuth = async (req, res, next) => {
   try {
-    const token =
-      req.headers["authorization"]?.split(" ")[1] ||
-      req.headers["access-token"];
+    const token = getTokenFromRequest(req);
 
     if (!token) {
       throw new Api401Error(API_RESPONSE_MESSAGE.UNAUTHORIZED);
     }
 
-    const decoded = jwt.verify(token, jwtSecret);
-
+    const decoded = jwt.verify(token, secret);
     const user = await student.findByPk(decoded.id);
 
     if (!user || user.role !== "admin") {
@@ -73,10 +92,9 @@ const adminAuth = async (req, res, next) => {
     }
 
     req.user = user;
-
     next();
   } catch (error) {
-    next(error);
+    next(handleJwtError(error));
   }
 };
 
