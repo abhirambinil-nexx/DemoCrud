@@ -2,8 +2,8 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import student from "./student.model.js";
 
-const attendance = sequelize.define(
-  "attendance",
+const Attendance = sequelize.define(
+  "attendances",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -60,4 +60,4 @@ const attendance = sequelize.define(
   },
 );
 
-export default attendance;
+export default Attendance;

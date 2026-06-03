@@ -6,6 +6,8 @@ import {
   deleteAttendance,
 } from "../repo/attendence.repo.js";
 
+import { totalattendance } from "../service/sequelize.query.js";
+
 import {
   setAttendance,
   deleteAttendance as deleteRedisAttendance,
@@ -105,8 +107,8 @@ async function updateOneAttendance(req, res) {
 
 async function deleteOneAttendance(req, res) {
   try {
-    const { studentId,date  } = req.params;
-    await deleteRedisAttendance(studentId,date);
+    const { studentId, date } = req.params;
+    await deleteRedisAttendance(studentId, date);
 
     await deleteAttendance(studentId);
     res.status(200).json({
@@ -121,10 +123,26 @@ async function deleteOneAttendance(req, res) {
   }
 }
 
+async function getTotalAttendance(req, res) {
+  try {
+    const { studentId } = req.params;
+    const data = await totalattendance(studentId);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
 export {
   createAttendance,
   getAllAttendance,
   getOneAttendance,
   updateOneAttendance,
   deleteOneAttendance,
+  getTotalAttendance,
 };
